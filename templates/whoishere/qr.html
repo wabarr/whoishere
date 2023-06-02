@@ -1,0 +1,23 @@
+{% extends 'whoishere/base.html' %}
+
+{% block content %}
+    <div class="row firstrow">
+        <div class="col">
+            <h3>Check in for {{ object.course }} on {{ object.starts | date }}</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {{ svg | safe }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h3><a href="{{ URL }}"/>Scan to check in</h3>
+        </div>
+    </div>
+
+
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "whoishere/base.html" %}
+
+{% block content %}
+
+        {%  for object in object_list %}
+        {% if object.is_active %}
+        <div class="row">
+            <div class="col">
+                {{ object.course }}
+            </div>
+            <div class="col">
+                <a href="/qr/{{ object.slug }}" >{{ object.slug }}</a>
+            </div>
+            <div class="col">
+                {{ object.starts }}
+            </div>
+            <div class="col">
+                {{ object.expires }}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'whoishere/base.html' %}
+
+{% block content %}
+
+        <div class="row">
+            <div class="col">
+                <h3>Checking in for {{ pollObject.course }} on {{ pollObject.starts | date }}</h3>
+            </div>
+        </div>
+
+        {% if request.session.last_poll_participated == pollObject.id %}
+            <h3>You have already participated in this attendance poll</h3>
+        {% else %}
+        <form action='/checkin/{{ pollObject.slug }}/' method='post'>
+        {% csrf_token %}
+            {%  if form.non_field_errors  %}
+                <div class="row">
+                    <div class="col">
+                        {{ form.non_field_errors  }}
+                    </div>
+                </div>
+            {% endif %}
+            <div class="row justify-content-start">
+                <div class="col-sm-3">First Name</div>
+                <div class="col-sm-3">Last Name</div>
+            </div>
+            <div class="row justify-content-start">
+                <div class="col-sm-3">
+                    {{ form.student_first_name.errors }}
+                    {{ form.student_first_name }}
+                </div>
+                <div class="col-sm-3">
+                    {{ form.student_last_name.errors }}
+                    {{ form.student_last_name }}
+                </div>
+            </div>
+            <div class="row justify-content-start" style="padding-top:15px;">
+                <div class="col-sm-3">Email handle</div>
+                <div class="col-sm-3">GWID</div>
+            </div>
+            <div class="row justify-content-start">
+                <div class="col-sm-3">
+                    {{ form.gw_email_handle.errors }}
+                    {{ form.gw_email_handle }}
+                </div>
+                <div class="col-sm-3">
+                    {{ form.GWID.errors }}
+                    {{ form.GWID }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    {{ form.attendance_poll }}
+                    <input type="submit" value="Check in"/>
+                </div>
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}
