@@ -8,7 +8,7 @@ from django.utils.timezone import now
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
-
+from django.forms import modelform_factory
 
 
 
@@ -126,3 +126,22 @@ class SplashView(TemplateView):
 class AttendancePollList(LoginRequiredMixin, ListView):
     template_name = "whoishere/attendance_poll_list.html"
     queryset = AttendancePoll.objects.all()#to be filtered in template
+
+    def get_context_data(self, **kwargs):
+        context = super(AttendancePollList, self).get_context_data()
+        count = 0
+        for poll in AttendancePoll.objects.all():
+            if poll.is_active():
+                count += 1
+        context["active_poll_count"] = count
+        return context
+
+class AttendancePollCreate(LoginRequiredMixin, CreateView):
+    model = AttendancePoll
+    success_url = "/attendance-polls"
+    form_class = modelform_factory(model=AttendancePoll, fields=["course", "starts", "expires"])
+
+class CheckinList(ListView):
+    template_name = "whoishere/checkin_list.html"
+    #the queryset gets attendance poll objects, rather than checkins, to simplify grouping by attendance poll in template logic
+    queryset = AttendancePoll.objects.all()

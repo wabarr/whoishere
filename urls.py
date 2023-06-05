@@ -1,4 +1,4 @@
-from whoishere.views import QRView, CheckinView, SuccessView, SplashView, AttendancePollList
+from whoishere.views import QRView, CheckinView, SuccessView, SplashView, AttendancePollList, AttendancePollCreate, CheckinList
 """
 URL configuration for whoishere project.
 
@@ -20,9 +20,11 @@ from django.urls import path
 
 urlpatterns = [
     path('success/', SuccessView.as_view()),
+    path('checkins/', CheckinList.as_view()),
     path('checkin/<slug:slug>/', CheckinView.as_view(), name="checkin-view"),
     path('attendance-polls/', AttendancePollList.as_view()),
     path('qr/<slug:slug>', QRView.as_view()),
+    path('create-poll/', AttendancePollCreate.as_view()),
     path('admin/', admin.site.urls),
     path('', SplashView.as_view())
 ]

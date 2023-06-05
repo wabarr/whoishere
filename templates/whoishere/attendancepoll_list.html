@@ -1,0 +1,34 @@
+{% extends "whoishere/base.html" %}
+
+{% block content %}
+    {% load tz %}
+    {% if active_poll_count > 0 %}
+        <h3 style="padding-top: 10px;">Currently Active Attendance Polls</h3>
+        <div class="row" style="font-weight:bold;">
+            <div class="col">Class</div>
+            <div class="col">Slug</div>
+            <div class="col">Opens</div>
+            <div class="col">Closes</div>
+        </div>
+        {%  for object in object_list %}
+        <div class="row">
+            <div class="col">
+                {{ object.course }}
+            </div>
+            <div class="col">
+                <a href="/qr/{{ object.slug }}" >{{ object.slug }}</a>
+            </div>
+            {% timezone "US/Eastern" %}
+            <div class="col">
+                {{ object.starts }} ET
+            </div>
+            <div class="col">
+                {{ object.expires }} ET
+            </div>
+            {% endtimezone %}
+        </div>
+        {% endfor %}
+    {% else %}
+        There are no currently active polls
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'whoishere/base.html' %}
+
+{% block content %}
+    {% load tz %}
+    {% timezone "US/Eastern" %}
+    <form action="/create-poll/" method="post">
+        {% csrf_token %}
+
+     {%  if form.non_field_errors  %}
+         <div class="row">
+             <div class="col">
+                 {{ form.non_field_errors  }}
+             </div>
+         </div>
+     {% endif %}
+
+    <div class="row">
+        <div class="col">
+        {{ form.course.errors }}
+        {{ form.course.label }}
+        {{ form.course }}
+        </div>
+    <div>
+    <div class="row">
+        <div class="col">
+        {{ form.starts.errors }}
+        {{ form.starts.label }}
+        {{ form.starts }}
+        </div>
+    <div>
+    <div class="row">
+        <div class="col">
+        {{ form.expires.errors }}
+        {{ form.expires.label }}
+        {{ form.expires }}
+        {{ form.expires.help_text }}
+        </div>
+    </div>
+        <input type="submit" value="Create poll">
+    </form>
+    {% endtimezone %}
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "whoishere/base.html" %}
+
+{% block content %}
+    {% load tz %}
+    {% timezone "US/Eastern" %}
+        {%  for object in object_list %}
+            {% if object.is_active %}
+        <div class="row">
+            <div class="col">
+                <h3 style="padding-top: 10px;">Who's checked in for {{ object.course.subject_code }} {{ object.course.course_number }} on {{ object.starts | date }}? </h3>
+            </div>
+        </div>
+            <div class="row">
+            {% if object.checkin_set.all  %}
+
+            {% for checkin in object.checkin_set.all %}
+                    <div class="col-sm-6 col-lg-3">
+                        <div class="card" style="padding:3px;">
+
+                        {{ checkin.student_first_name }} {{ checkin.student_last_name }} {{ checkin.timestamp|time }} ET
+
+                        </div>
+                    </div>
+
+            {% endfor %}
+            {% else %}
+                <p>Nobody has checked in yet.</p>
+            {% endif %}
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endtimezone %}
+{% endblock %}
