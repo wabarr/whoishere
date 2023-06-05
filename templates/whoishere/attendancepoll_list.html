@@ -11,6 +11,7 @@
             <div class="col">Closes</div>
         </div>
         {%  for object in object_list %}
+            {% if object.is_active %}
         <div class="row">
             <div class="col">
                 {{ object.course }}
@@ -27,6 +28,7 @@
             </div>
             {% endtimezone %}
         </div>
+            {% endif %}
         {% endfor %}
     {% else %}
         There are no currently active polls

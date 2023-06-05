@@ -124,7 +124,7 @@ class SplashView(TemplateView):
     template_name = "whoishere/splash.html"
 
 class AttendancePollList(LoginRequiredMixin, ListView):
-    template_name = "whoishere/attendance_poll_list.html"
+    template_name = "whoishere/attendancepoll_list.html"
     queryset = AttendancePoll.objects.all()#to be filtered in template
 
     def get_context_data(self, **kwargs):
