@@ -130,7 +130,8 @@ class AttendancePollList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(AttendancePollList, self).get_context_data()
         count = 0
-        for poll in AttendancePoll.objects.all():
+        polls = AttendancePoll.objects.all()
+        for poll in polls:
             if poll.is_active():
                 count += 1
         context["active_poll_count"] = count
