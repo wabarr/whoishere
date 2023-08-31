@@ -16,9 +16,9 @@ class Course(models.Model):
     year = models.PositiveIntegerField( validators=[MinValueValidator(2023), MaxValueValidator(2050)])
     subject_code = models.CharField(default='ANTH', max_length=4, null=False, blank=False, choices=[("ANTH", "ANTH"), ("HOMP", "HOMP")])
     course_number = models.PositiveIntegerField(validators=[MinValueValidator(1001), MaxValueValidator(7000)])
-
+    nickname = models.CharField(null=True, blank=True, max_length=50, help_text="a shorthand way to refer to the course")
     def __str__(self):
-        return "{} {} ({}{})".format(self.subject_code, self.course_number, self.semester[0:1], str(self.year)[2:4])
+        return "{} - {} {} ({}{})".format(self.nickname, self.subject_code, self.course_number, self.semester[0:1], str(self.year)[2:4])
 
 
 class AttendancePoll(models.Model):
@@ -44,7 +44,7 @@ class AttendancePoll(models.Model):
             return False
 
     def __str__(self):
-        return "{} - {}".format((self.expires.strftime("%x")),self.course)
+        return "{} - {}".format((self.expires.strftime("%x")), self.course)
 
 
 GWID_validator = RegexValidator(r"^G[0-9]{8}$", "Your GWID must be a capital G followed by 8 numbers")

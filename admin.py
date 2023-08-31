@@ -2,7 +2,7 @@ from django.contrib import admin
 from whoishere.models import Course, Checkin, AttendancePoll
 
 class CourseAdmin(admin.ModelAdmin):
-    fields = ["instructor", "semester", "year", "subject_code", "course_number"]
+    fields = ["nickname", "instructor", "semester", "year", "subject_code", "course_number"]
 
 
 class CheckinAdmin(admin.ModelAdmin):
