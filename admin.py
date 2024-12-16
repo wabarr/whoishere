@@ -11,7 +11,7 @@ class CheckinAdmin(admin.ModelAdmin):
     fields = ["timestamp", "attendance_poll", "student_last_name", "student_first_name", "gw_email_handle", "GWID"]
     readonly_fields = ["timestamp"]
     list_display = fields
-    list_filter = ["attendance_poll", "attendance_poll__course__year", "attendance_poll__course__semester","attendance_poll__course__nickname"]
+    list_filter = ["attendance_poll__course__year", "attendance_poll__course__semester","attendance_poll__course__nickname"]
     search_fields = ["student_last_name", "student_first_name", "gw_email_handle", "GWID"]
     actions = ["export_as_csv"]
 
