@@ -5,10 +5,15 @@ from django import forms
 import qrcode
 import qrcode.image.svg
 from django.utils.timezone import now
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.forms import modelform_factory
+from django.contrib.auth.forms import AuthenticationForm
+from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_not_required
+#note we need the method_decorator to use login_not_required decorator with class based views
+from django.utils.decorators import method_decorator
+from django.contrib.auth import login
 
 
 
@@ -16,7 +21,7 @@ from django.forms import modelform_factory
 #    URL = forms.URLField(label="URL", max_length=500)
 
 
-class QRView(LoginRequiredMixin, TemplateView):
+class QRView(TemplateView):
     template_name = "whoishere/qr.html"
 
     def get_context_data(self, *args, **kwargs):
@@ -46,7 +51,6 @@ class QRView(LoginRequiredMixin, TemplateView):
 
         return context
 
-
 class CheckinModelForm(forms.ModelForm):
     class Meta:
         model = Checkin
@@ -70,7 +74,7 @@ class CheckinModelForm(forms.ModelForm):
         except ObjectDoesNotExist:
             raise ValidationError("Sorry, I can't check you in for an attendance poll that doesn't exist.")
 
-
+@method_decorator(login_not_required, name='dispatch')
 class CheckinView(CreateView):
     model = Checkin
     success_url = "/success/"
@@ -116,14 +120,15 @@ class CheckinView(CreateView):
         self.request.session["last_poll_participated"] = self.object.attendance_poll.id
         return super(CheckinView, self).get_success_url()
 
-
+@method_decorator(login_not_required, name='dispatch')
 class SuccessView(TemplateView):
     template_name = 'whoishere/success.html'
 
+@method_decorator(login_not_required, name='dispatch')
 class SplashView(TemplateView):
     template_name = "whoishere/splash.html"
 
-class AttendancePollList(LoginRequiredMixin, ListView):
+class AttendancePollList(ListView):
     template_name = "whoishere/attendancepoll_list.html"
     queryset = AttendancePoll.objects.all()#to be filtered in template
 
@@ -137,7 +142,7 @@ class AttendancePollList(LoginRequiredMixin, ListView):
         context["active_poll_count"] = count
         return context
 
-class AttendancePollCreate(LoginRequiredMixin, CreateView):
+class AttendancePollCreate(CreateView):
     model = AttendancePoll
     success_url = "/attendance-polls"
     form_class = modelform_factory(model=AttendancePoll, fields=["course", "starts", "expires"])
@@ -146,3 +151,18 @@ class CheckinList(ListView):
     template_name = "whoishere/checkin_list.html"
     #the queryset gets attendance poll objects, rather than checkins, to simplify grouping by attendance poll in template logic
     queryset = AttendancePoll.objects.all()
+
+#apply directly to the function based login view
+@login_not_required
+def login_view(request):
+  if request.method == "POST":
+    form = AuthenticationForm(request, data=request.POST)
+    if form.is_valid():
+      user = form.get_user()
+      login(request, user)
+      urlForRedirect = request.GET.get('next')
+      return redirect(urlForRedirect)
+  else:
+    form = AuthenticationForm()
+
+  return render(request, "whoishere/login.html", {"form": form})

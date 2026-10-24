@@ -1,4 +1,5 @@
-from whoishere.views import QRView, CheckinView, SuccessView, SplashView, AttendancePollList, AttendancePollCreate, CheckinList
+from whoishere.views import (QRView, CheckinView, SuccessView, SplashView,
+                             AttendancePollList, AttendancePollCreate, CheckinList, login_view)
 """
 URL configuration for whoishere project.
 
@@ -15,16 +16,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+from whoishere.admin import checkinAdminSite
 from django.urls import path
 
 urlpatterns = [
     path('success/', SuccessView.as_view()),
+    path("accounts/login/", login_view, name="login"),
     path('checkins/', CheckinList.as_view()),
     path('checkin/<slug:slug>/', CheckinView.as_view(), name="checkin-view"),
     path('attendance-polls/', AttendancePollList.as_view()),
     path('qr/<slug:slug>', QRView.as_view()),
     path('create-poll/', AttendancePollCreate.as_view()),
-    path('admin/', admin.site.urls),
-    path('', SplashView.as_view())
+    path('admin/', checkinAdminSite.urls),
+    path('', SplashView.as_view()),
 ]
