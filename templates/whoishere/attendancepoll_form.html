@@ -2,7 +2,7 @@
 
 {% block content %}
     {% load tz %}
-    {% timezone "US/Eastern" %}
+    {% timezone "America/New_York" %}
     <form action="/create-poll/" method="post">
         {% csrf_token %}
 
