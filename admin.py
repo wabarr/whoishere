@@ -35,6 +35,10 @@ class AttendanceCheckAdmin(admin.ModelAdmin):
     fields = ["slug", "course", "starts", "expires"]
     readonly_fields = ["slug"]
 
-admin.site.register(Course, CourseAdmin)
-admin.site.register(Checkin, CheckinAdmin)
-admin.site.register(AttendancePoll, AttendanceCheckAdmin)
+class CheckinAdminSite(admin.AdminSite):
+    site_header = "Checkin administration"
+checkinAdminSite = CheckinAdminSite(name='checkin-admin')
+
+checkinAdminSite.register(Course, CourseAdmin)
+checkinAdminSite.register(Checkin, CheckinAdmin)
+checkinAdminSite.register(AttendancePoll, AttendanceCheckAdmin)
