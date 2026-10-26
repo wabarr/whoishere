@@ -16,7 +16,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from whoishere.admin import checkinAdminSite
+from whoishere.admin import checkinAdminSite, admin
 from django.urls import path
 
 urlpatterns = [
@@ -28,5 +28,6 @@ urlpatterns = [
     path('qr/<slug:slug>', QRView.as_view()),
     path('create-poll/', AttendancePollCreate.as_view()),
     path('admin/', checkinAdminSite.urls),
+    path('su/',admin.site.urls),
     path('', SplashView.as_view()),
 ]
